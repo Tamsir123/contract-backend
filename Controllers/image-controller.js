@@ -1,10 +1,4 @@
-// filepath: /home/tamsir/Desktop/contract-backend/Controllers/image-controller.js
 const { GoogleGenerativeAI } = require("@google/generative-ai");
-const fs = require("fs");
-const path = require("path");
-
-// Pour génération de texte uniquement, pas d'image directe avec Gemini
-const MODEL_NAME = "gemini-1.5-pro";
 
 exports.generateImage = async (req, res) => {
   const { instruction } = req.body;
@@ -15,21 +9,22 @@ exports.generateImage = async (req, res) => {
 
   try {
     const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-    const model = genAI.getGenerativeModel({ model: MODEL_NAME });
+    const model = genAI.getGenerativeModel({ model: "models/Gemini 1.5 Pro" }); // Peut changer selon ton accès à l'API image
 
-    // Note: Gemini 1.5 Pro ne génère pas directement des images, 
-    // ce code va simplement renvoyer une réponse textuelle
     const result = await model.generateContent([
-      { role: "user", parts: [{ text: `Génère une description pour une image selon l'instruction suivante : ${instruction}` }] }
+      { role: "user", parts: [{ text: `Génère une image selon l'instruction suivante : ${instruction}` }] }
     ]);
 
     const response = await result.response;
-    const text = response.text();
+    const imageBase64 = response.parts?.[0]?.inlineData?.data;
 
-    // Pour le moment, on renvoie juste le texte de description
-    res.json({ result: text, note: "Gemini API ne génère pas directement des images. Voici une description textuelle." });
+    if (!imageBase64) {
+      return res.status(500).json({ error: "Aucune image générée." });
+    }
+
+    res.json({ image: `data:image/png;base64,${imageBase64}` });
   } catch (err) {
-    console.error("Erreur lors de la génération d'image :", err.message);
-    res.status(500).json({ error: "Erreur lors de la génération d'image." });
+    console.error("Erreur lors de la génération d’image :", err.message);
+    res.status(500).json({ error: "Erreur lors de la génération d’image." });
   }
 };

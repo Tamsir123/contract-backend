@@ -8,7 +8,7 @@ exports.summarize = async (req, res) => {
   const { contractText } = req.body;
 
   try {
-    const prompt = fs.readFileSync(path.join(__dirname, "../prompt/summarizePrompt.txt"), "utf-8");
+    const prompt = fs.readFileSync(path.join(__dirname, "../prompts/summarizePrompt.txt"), "utf-8");
     const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
     const model = genAI.getGenerativeModel({ model: MODEL_NAME });
 

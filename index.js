@@ -33,11 +33,6 @@
 
 
 const express = require("express");
-const dotenv = require("dotenv");
-
-// Configuration dotenv pour charger les variables d'environnement
-dotenv.config();
-
 const app = express();
 app.use(express.json());
 

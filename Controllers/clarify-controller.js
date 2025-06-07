@@ -8,7 +8,7 @@ exports.clarify = async (req, res) => {
   const { question, contractContext } = req.body;
 
   try {
-    const prompt = fs.readFileSync(path.join(__dirname, "../prompt/clarifyPrompt.txt"), "utf-8");
+    const prompt = fs.readFileSync(path.join(__dirname, "../prompts/clarifyPrompt.txt"), "utf-8");
     const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
     const model = genAI.getGenerativeModel({ model: MODEL_NAME });
 
