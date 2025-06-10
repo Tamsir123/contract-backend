@@ -20,7 +20,7 @@ app.use(bodyParser.json());
 app.use("/api/", authRoutes);
 app.use("/contract", contractSummaryRoute);
 app.use("/contract", riskAlertRoute);
-app.use("/contract", contractAskRoute);
+// app.use("/contract", contractAskRoute);
 app.use("/ai", chatRoute);
 
 
