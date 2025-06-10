@@ -10,46 +10,23 @@ router.post("/inscription", async (req, res) => {
     name,
     email,
     password,
-    birth_date,
+    birthDate,
     gender,
-    user_type,
+    userType,
     preferences,
-    accept_terms,
+    acceptTerms,
   } = req.body;
 
   try {
     const [existing] = await pool.query("SELECT * FROM users WHERE email = ?", [email]);
     if (existing.length > 0) return res.status(400).json({ message: "Email déjà utilisé." });
 
-    // Map English values to French ENUM values
-    const userTypeMapping = {
-      'individual': 'particulier',
-      'professional': 'professionnel',
-      'company': 'entreprise',
-      'particulier': 'particulier',
-      'professionnel': 'professionnel',
-      'entreprise': 'entreprise'
-    };
-
-    const genderMapping = {
-      'male': 'homme',
-      'female': 'femme',
-      'other': 'autre',
-      'homme': 'homme',
-      'femme': 'femme',
-      'autre': 'autre'
-    };
-
-    const mappedUserType = userTypeMapping[user_type] || 'particulier';
-    const mappedGender = genderMapping[gender] || null;
-    const mappedAcceptTerms = accept_terms === true || accept_terms === 'true' || accept_terms === 1;
-
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const [userResult] = await pool.query(
       `INSERT INTO users (name, email, password_hash, birth_date, gender, user_type, accept_terms)
        VALUES (?, ?, ?, ?, ?, ?, ?)`,
-      [name, email, hashedPassword, birth_date, mappedGender, mappedUserType, mappedAcceptTerms]
+      [name, email, hashedPassword, birthDate, gender, userType, acceptTerms]
     );
 
     const userId = userResult.insertId;

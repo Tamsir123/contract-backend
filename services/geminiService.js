@@ -58,4 +58,31 @@ async function analyzeContractWithAlert(contractText, userPreference) {
   }
 }
 
-module.exports = { analyzeContract, analyzeContractWithAlert };
+// Répond à une question sur un contrat
+async function askAboutContract(contractText, question) {
+  try {
+    const response = await axios.post(
+      `${GEMINI_API_URL}?key=${process.env.GEMINI_API_KEY}`,
+      {
+        contents: [
+          { role: "user", parts: [{ text: `CONTRAT :\n${contractText}` }] },
+          { role: "user", parts: [{ text: `QUESTION : ${question}` }] }
+        ],
+        system_instruction: {
+          role: "system",
+          parts: [{ text: SYSTEM_PROMPT }],
+        },
+      }
+    );
+    return response.data.candidates?.[0]?.content?.parts?.[0]?.text || "Aucune réponse générée.";
+  } catch (err) {
+    console.error("Erreur dans askAboutContract:", err.response?.data || err.message);
+    throw err;
+  }
+}
+
+module.exports = {
+  analyzeContract,
+  analyzeContractWithAlert,
+  askAboutContract,
+};

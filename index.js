@@ -5,6 +5,7 @@ const bodyParser = require("body-parser");
 const contractSummaryRoute = require("./routes/contractSummary");
 const riskAlertRoute = require("./routes/riskAlert");
 const authRoutes = require("./routes/auth");
+const contractAskRoute = require("./routes/contractAsk");
 const db = require("./db"); 
 
 
@@ -18,6 +19,7 @@ app.use(bodyParser.json());
 app.use("/api/", authRoutes);
 app.use("/contract", contractSummaryRoute);
 app.use("/contract", riskAlertRoute);
+app.use("/contract", contractAskRoute);
 
 
 app.listen( port , () => {
