@@ -4,7 +4,7 @@ const ALERT_PROMPT = require("../prompt/alertPrompt");
 
 const GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent";
 
-// Service Gemini centralisé pour analyse classique et alertes personnalisées
+
 async function analyzeContract(contractText) {
   try {
     const response = await axios.post(
